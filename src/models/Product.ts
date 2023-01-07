@@ -1,11 +1,11 @@
 import { StatusCodes } from 'http-status-codes';
 
 import { BadRequestError, CustomError } from '../errors';
+import { CategoryRepository } from '../repositories/CategoryRepository';
 import { ProductRepository } from '../repositories/ProductRepository';
 import { Product, ProductDetails } from '../types/product';
 import { productSchema, uuidSchema } from '../utils/validations';
 
-//TODO: id validations
 export class ProductStore {
   static async index(): Promise<Product[]> {
     return await ProductRepository.findAll();
@@ -22,9 +22,19 @@ export class ProductStore {
     return product;
   }
 
-  //TODO: check if product already exists
+  //TODO: add trailing zeros
   static async create(details: ProductDetails): Promise<Product> {
     await productSchema.validateAsync(details, { abortEarly: false });
+
+    if (
+      await ProductRepository.isExistentProduct(details.name, details.category)
+    ) {
+      throw new CustomError(
+        `Product '${details.name}' of category '${details.category}' already exists`,
+        StatusCodes.CONFLICT
+      );
+    }
+
     const createdProduct = await ProductRepository.save(details);
 
     if (!createdProduct) {
@@ -42,7 +52,11 @@ export class ProductStore {
   static async topNProducts(): Promise<Product[]> {}
 
   static async productsByCategory(category: string): Promise<Product[]> {
-    //TODO: check if category exists
+    const selectedCategory = await CategoryRepository.findByName(category);
+
+    if (!selectedCategory) {
+      throw new BadRequestError(`Category '${category}' does not exist`);
+    }
     return await ProductRepository.findByCategory(category);
   }
 }

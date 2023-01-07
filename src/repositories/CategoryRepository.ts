@@ -23,4 +23,16 @@ export class CategoryRepository {
     );
     return result.rows[0];
   }
+
+  static async findByName(name: string): Promise<Category> {
+    const conn = await client.connect();
+    const categoryQuery =
+      'SELECT id, category_name AS name FROM categories ' +
+      'WHERE LOWER(category_name) = ($1)';
+    const result: QueryResult<Category> = await conn.query(categoryQuery, [
+      name.toLowerCase()
+    ]);
+
+    return result.rows[0];
+  }
 }

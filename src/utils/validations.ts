@@ -31,7 +31,7 @@ const categorySchema = Joi.object({
 
 const productSchema = Joi.object({
   name: nameValidation('Product name'),
-  price: Joi.number().required().min(1),
+  price: Joi.number().required().min(0),
   category: Joi.string().min(1).required()
 });
 

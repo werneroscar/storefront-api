@@ -84,6 +84,34 @@ export class ProductRepository {
       [categoryId]
     );
 
+    conn.release();
     return categoryResult.rows;
+  }
+
+  static async isExistentProduct(
+    productName: string,
+    category: string
+  ): Promise<boolean> {
+    const conn = await client.connect();
+    const categoryIdQuery =
+      'SELECT id from categories WHERE LOWER(category_name) = ($1)';
+    const categoryIdResult = await conn.query(categoryIdQuery, [
+      category.toLowerCase()
+    ]);
+
+    if (categoryIdResult.rowCount) {
+      const productQuery =
+        'SELECT * from products WHERE LOWER(product_name) = ($1) AND category_id = ($2)';
+      const productResult = await conn.query(productQuery, [
+        productName.toLowerCase(),
+        categoryIdResult.rows[0].id
+      ]);
+
+      if (productResult.rowCount) {
+        return true;
+      }
+    }
+    conn.release();
+    return false;
   }
 }

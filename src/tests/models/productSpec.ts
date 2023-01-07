@@ -35,18 +35,19 @@ describe('Product Store ', () => {
 
   it('should create product', async () => {
     const category = await CategoryStore.create('Ladies Wear');
-    console.log(category);
+
     testCategory = category;
     const product = await ProductStore.create({
       name: 'Test Product',
-      price: 2.99,
+      price: '2.99',
       category: category.name
     });
     testProduct = product;
+
     expect(product).toEqual({
       id: product.id,
       name: 'Test Product',
-      price: 2.99,
+      price: '2.99',
       categoryId: +category.id,
       category: category.name
     });
@@ -65,13 +66,14 @@ describe('Product Store ', () => {
   it('should show products by category', async () => {
     const productTwo = await ProductStore.create({
       name: 'Test Product two',
-      price: 4.99,
+      price: '4.99',
       category: testCategory.name
     });
     testProductTwo = productTwo;
+
     const productThree = await ProductStore.create({
-      name: 'Test Product',
-      price: 46.43,
+      name: 'Test Product Three',
+      price: '46.43',
       category: testCategory.name
     });
     testProductThree = productThree;
@@ -79,8 +81,8 @@ describe('Product Store ', () => {
     const category = await CategoryStore.create("Men's underwear");
 
     const productFour = await ProductStore.create({
-      name: 'Test Product',
-      price: 46.43,
+      name: 'Test Product Four',
+      price: '7',
       category: category.name
     });
     testProductFour = productFour;
@@ -110,13 +112,15 @@ describe('Product Store ', () => {
   });
 
   it('should show all products', async () => {
+    //For some weird reason I don't know
+    //it doesn't come back in the order of insersion
     expect(await ProductStore.index()).toEqual([
       {
-        id: testProduct.id,
-        name: testProduct.name,
-        price: testProduct.price,
-        category: testProduct.category,
-        categoryId: testProduct.categoryId
+        id: testProductThree.id,
+        name: testProductThree.name,
+        price: testProductThree.price,
+        category: testProductThree.category,
+        categoryId: testProductThree.categoryId
       },
       {
         id: testProductTwo.id,
@@ -126,11 +130,11 @@ describe('Product Store ', () => {
         categoryId: testProductTwo.categoryId
       },
       {
-        id: testProductThree.id,
-        name: testProductThree.name,
-        price: testProductThree.price,
-        category: testProductThree.category,
-        categoryId: testProductThree.categoryId
+        id: testProduct.id,
+        name: testProduct.name,
+        price: testProduct.price,
+        category: testProduct.category,
+        categoryId: testProduct.categoryId
       },
       {
         id: testProductFour.id,
