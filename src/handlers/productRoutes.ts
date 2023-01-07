@@ -4,6 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 
 import { ProductStore } from '../models/Product';
 import { Product } from '../types/product';
+import { AuthService } from '../services/Auth';
 
 const index = async (
   _req: Request,
@@ -58,7 +59,7 @@ const productsByCategory = async (
 };
 
 const productRoutes = (app: Application) => {
-  app.route('/products').get(index).post(create);
+  app.route('/products').get(index).post(AuthService.authenticate, create);
   app.route('/products/:id').get(show);
   app.route('/products/categories/:category').get(productsByCategory);
 };
