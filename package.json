@@ -6,11 +6,10 @@
   "scripts": {
     "start": "nodemon src/server.ts",
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
-    "test": "jasmine-ts",
     "tsc": "tsc",
     "jasmine": "jasmine",
-    "build": "npx tsc"
-
+    "build": "npx tsc",
+    "test": "npm run build && npm run jasmine"
   },
   "author": "Udacity",
   "license": "ISC",
