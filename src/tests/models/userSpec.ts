@@ -1,5 +1,6 @@
 import { UserStore } from '../../models/User';
 import { BadRequestError } from '../../errors';
+import { getInvalidDetailsError } from '../../utils/get-errors';
 
 describe('User store', () => {
   it('should have an index method', () => {
@@ -40,33 +41,67 @@ describe('User store', () => {
   });
 
   it('should should throw error if first name is not provided', async () => {
+    //@ts-ignore
     const user = {
-      firstName: '',
-      lastName: 'Brigss',
-      password: '1234',
+      firstName: undefined,
+      lastName: 'Mitchel',
+      password: 'Mitch123',
     };
 
-    expect(()=>UserStore.create(user)).toThrowError(BadRequestError,'please provide first name');
+    //@ts-ignore
+    const error = await getInvalidDetailsError(UserStore.create, user);
+    expect(error).toEqual(new BadRequestError('Please provide first name'));
+  });
+
+  it('should should throw error if first name less than one character', async () => {
+    const user = {
+      firstName: '',
+      lastName: 'Logan',
+      password: '6587',
+    };
+
+    const error = await getInvalidDetailsError(UserStore.create, user);
+    expect(error).toEqual(
+      new BadRequestError('First name must be at least 1 character long')
+    );
   });
 
   it('should should throw error if last name is not provided', async () => {
+    //@ts-ignore
     const user = {
-      firstName: 'Dan',
-      lastName: '',
-      password: '1234',
+      firstName: 'Samuel',
+      lastName: undefined,
+      password: 'sam',
     };
 
-    expect(()=>UserStore.create(user)).toThrowError(BadRequestError, 'please provide last name');
+    //@ts-ignore
+    const error = await getInvalidDetailsError(UserStore.create, user);
+    expect(error).toEqual(new BadRequestError('Please provide last name'));
+  });
+
+  it('should should throw error if last name less than one character', async () => {
+    const user = {
+      firstName: 'Micheal',
+      lastName: '',
+      password: '6587',
+    };
+
+    const error = await getInvalidDetailsError(UserStore.create, user);
+    expect(error).toEqual(
+      new BadRequestError('Last name must be at least 1 character long')
+    );
   });
 
   it('should should throw error if password is not provided', async () => {
+    //@ts-ignore
     const user = {
-      firstName: 'Dan',
-      lastName: '',
-      password: '1234',
+      firstName: 'George',
+      lastName: 'White',
+      password: undefined,
     };
 
-    expect(()=>UserStore.create(user)).toThrowError(BadRequestError, 'please provide a password');
+    //@ts-ignore
+    const error = await getInvalidDetailsError(UserStore.create, user);
+    expect(error).toEqual(new BadRequestError('Please provide a password'));
   });
-  
 });
