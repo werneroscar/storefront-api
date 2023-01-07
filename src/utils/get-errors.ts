@@ -16,7 +16,7 @@ const getInvalidDetailsError = async (
   return error;
 };
 
-const getInvalidAuthPasswordError = (
+const getInvalidAuthPasswordOrUserIdError = (
   fn: Function,
   password: string
 ): unknown => {
@@ -32,4 +32,4 @@ const getInvalidAuthPasswordError = (
   return error;
 };
 
-export { getInvalidDetailsError, getInvalidAuthPasswordError };
+export { getInvalidDetailsError, getInvalidAuthPasswordOrUserIdError };

@@ -1,6 +1,9 @@
 import { UserStore } from '../../models/User';
 import { BadRequestError } from '../../errors';
-import { getInvalidDetailsError } from '../../utils/get-errors';
+import {
+  getInvalidDetailsError,
+  getInvalidAuthPasswordOrUserIdError
+} from '../../utils/get-errors';
 
 const userPassword = 'User@123';
 
@@ -16,7 +19,7 @@ describe('User store', () => {
   });
 });
 
-describe('Userstore index function', () => {
+describe('Userstore index method', () => {
   it('should be empty to start with', async () => {
     expect(await UserStore.index()).toEqual([]);
   });
@@ -49,7 +52,28 @@ describe('Userstore index function', () => {
   });
 });
 
-describe('User store create function', () => {
+describe('Userstore show method', () => {
+  it('should should throw BadRequestError if user id is invalid', async () => {
+    const error = getInvalidAuthPasswordOrUserIdError(UserStore.index, '5');
+    expect(error).toEqual(new BadRequestError('Invalid user id'));
+  });
+
+  it('should return user give a correct id', async () => {
+    const createdUser = await UserStore.create({
+      firstName: 'Micheal',
+      lastName: 'Lopez',
+      password: userPassword
+    });
+
+    expect(await UserStore.show(createdUser.id)).toEqual({
+      id: createdUser.id,
+      firstName: createdUser.firstName,
+      lastName: createdUser.lastName
+    });
+  });
+});
+
+describe('User store create method', () => {
   it('should create a user', async () => {
     const createdUser = await UserStore.create({
       firstName: 'Danny',
