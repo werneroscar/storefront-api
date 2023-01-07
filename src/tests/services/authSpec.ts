@@ -1,6 +1,6 @@
 import { AuthService } from '../../services/Auth';
 const { ADMIN_PASSWORD } = process.env;
-import { getInvalidAuthPasswordOrUserIdError } from '../../utils/get-errors';
+import { getInvalidAuthPasswordError } from '../../utils/get-errors';
 import { UnauthenticatedError } from '../../errors';
 
 describe('Auth service', () => {
@@ -9,7 +9,7 @@ describe('Auth service', () => {
   });
 
   it('should throw Unauthenticated Error if password is wrong', () => {
-    const error = getInvalidAuthPasswordOrUserIdError(
+    const error = getInvalidAuthPasswordError(
       AuthService.generateToken,
       '1234'
     );
@@ -18,7 +18,7 @@ describe('Auth service', () => {
   });
 
   it('should NOT throw Unauthenticated Error if password is correct', () => {
-    const error = getInvalidAuthPasswordOrUserIdError(
+    const error = getInvalidAuthPasswordError(
       AuthService.generateToken,
       ADMIN_PASSWORD as string
     );

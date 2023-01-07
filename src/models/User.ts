@@ -79,15 +79,37 @@ export class UserStore {
    */
   static async index(): Promise<User[]> {
     const conn = await client.connect();
-    const findUserQuery = 'SELECT id, first_name, last_name FROM users';
-    const result = await conn.query(findUserQuery);
+    const findUsersQuery = 'SELECT id, first_name, last_name FROM users';
+    const result = await conn.query(findUsersQuery);
     return result.rows.map((row) => {
       return { id: row.id, firstName: row.first_name, lastName: row.last_name };
     });
   }
 
   //@ts-ignore
-  static async show(id: string): Promise<User> {}
+  static async show(id: string): Promise<User> {
+    if (
+      !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(
+        id
+      )
+    ) {
+      throw new BadRequestError('Invalid user id');
+    }
+    const conn = await client.connect();
+    const findUserQuery =
+      'SELECT id, first_name, last_name FROM users WHERE id=($1)';
+    const result = await conn.query(findUserQuery, [id]);
+
+    if (result.rowCount < 1) {
+      throw new BadRequestError('There is no user with id: ' + id);
+    }
+
+    return {
+      id: result.rows[0].id,
+      firstName: result.rows[0].first_name,
+      lastName: result.rows[0].last_name
+    };
+  }
 
   /**
    *

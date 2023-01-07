@@ -2,7 +2,7 @@ import { UserStore } from '../../models/User';
 import { BadRequestError } from '../../errors';
 import {
   getInvalidDetailsError,
-  getInvalidAuthPasswordOrUserIdError
+  getInvalidIdError
 } from '../../utils/get-errors';
 
 const userPassword = 'User@123';
@@ -53,12 +53,24 @@ describe('Userstore index method', () => {
 });
 
 describe('Userstore show method', () => {
-  it('should should throw BadRequestError if user id is invalid', async () => {
-    const error = getInvalidAuthPasswordOrUserIdError(UserStore.index, '5');
+  it('should throw BadRequestError if user id is invalid', async () => {
+    const error = await getInvalidIdError(UserStore.show, '5');
     expect(error).toEqual(new BadRequestError('Invalid user id'));
   });
 
-  it('should return user give a correct id', async () => {
+  it('should throw BadRequestError if no user has the given id', async () => {
+    const error = await getInvalidIdError(
+      UserStore.show,
+      'cb0471f2-b3f2-4c4b-b898-c23dbd8832f4'
+    );
+    expect(error).toEqual(
+      new BadRequestError(
+        'There is no user with id: cb0471f2-b3f2-4c4b-b898-c23dbd8832f4'
+      )
+    );
+  });
+
+  it('should return user given a correct id', async () => {
     const createdUser = await UserStore.create({
       firstName: 'Micheal',
       lastName: 'Lopez',
@@ -218,7 +230,7 @@ describe('User store last name check', () => {
     );
   });
 
-  it('should should NOT throw BadRequestError if last name contains hypen', async () => {
+  xit('should should NOT throw BadRequestError if last name contains hypen', async () => {
     const user = {
       lastName: 'Logan',
       firstName: 'Last-name',

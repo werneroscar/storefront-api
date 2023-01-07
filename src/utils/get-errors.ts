@@ -8,7 +8,6 @@ const getInvalidDetailsError = async (
 
   try {
     await fn(details);
-    return undefined;
   } catch (e) {
     error = e;
   }
@@ -16,7 +15,22 @@ const getInvalidDetailsError = async (
   return error;
 };
 
-const getInvalidAuthPasswordOrUserIdError = (
+const getInvalidIdError = async (
+  fn: Function,
+  id: string
+): Promise<unknown> => {
+  let error;
+
+  try {
+    await fn(id);
+  } catch (e) {
+    error = e;
+  }
+
+  return error;
+};
+
+const getInvalidAuthPasswordError = (
   fn: Function,
   password: string
 ): unknown => {
@@ -24,7 +38,6 @@ const getInvalidAuthPasswordOrUserIdError = (
 
   try {
     fn(password);
-    return undefined;
   } catch (e) {
     error = e;
   }
@@ -32,4 +45,8 @@ const getInvalidAuthPasswordOrUserIdError = (
   return error;
 };
 
-export { getInvalidDetailsError, getInvalidAuthPasswordOrUserIdError };
+export {
+  getInvalidDetailsError,
+  getInvalidAuthPasswordError,
+  getInvalidIdError
+};
