@@ -73,8 +73,19 @@ export class UserStore {
     }
   }
 
-  //@ts-ignore
-  static async index(): Promise<User[]> {}
+  /**
+   * 
+   * @returns all users
+   */
+  static async index(): Promise<User[]> {
+    const conn = await client.connect();
+    const findUserQuery =
+      'SELECT id, first_name, last_name FROM users';
+    const result = await conn.query(findUserQuery);
+    return result.rows.map((row) => {
+      return { id: row.id, firstName: row.first_name, lastName: row.last_name };
+    });
+  }
 
   //@ts-ignore
   static async show(id: string): Promise<User> {}

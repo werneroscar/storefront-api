@@ -9,7 +9,8 @@
     "tsc": "tsc",
     "jasmine": "jasmine",
     "build": "npx tsc",
-    "test": "set ENV=test && npx tsc && db-migrate --env test up && jasmine && db-migrate db:drop students_test",
+    "test": "set ENV=test && npx tsc && db-migrate --env test up && jasmine && db-migrate --env test down",
+    "//test": "set ENV=test && npx tsc && db-migrate --env test up && jasmine && db-migrate db:drop storefront_test",
     "lint": "npx eslint . --ext .ts"
   },
   "author": "Udacity",

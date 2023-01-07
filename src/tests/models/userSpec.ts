@@ -16,9 +16,9 @@ describe('User store', () => {
   });
 });
 
-describe('User index function', () => {
-  it('should be empty to start with', () => {
-    expect(UserStore.index).toEqual([]);
+describe('Userstore index function', () => {
+  it('should be empty to start with', async() => {
+    expect(await UserStore.index()).toEqual([]);
   });
 
   it('should contain all created users', async () => {
