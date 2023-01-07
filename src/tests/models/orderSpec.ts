@@ -1,6 +1,7 @@
 import { OrderStore } from '../../models/Order';
 import { ProductStore } from '../../models/Product';
 import { UserStore } from '../../models/User';
+import { Order } from '../../types/order';
 import { Product } from '../../types/product';
 import { User } from '../../types/user';
 
@@ -23,12 +24,11 @@ describe('OrderStore should', () => {
   let testOrder: Order;
   let testOrderTwo: Order;
   let testOrderThree: Order;
-  let user: User;
 
+  let user: User;
   let userTwo: User;
 
   let product: Product;
-
   let productTwo: Product;
 
   it('create order', async () => {
@@ -69,6 +69,7 @@ describe('OrderStore should', () => {
       productId: order.productId,
       quantity: 3,
       cost: '30.00',
+      status: order.status,
       userId: order.userId,
       createdAt: order.createdAt,
       completedAt: null
