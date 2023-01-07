@@ -7,7 +7,10 @@
     "start": "nodemon src/server.ts",
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
     "test": "jasmine-ts",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "jasmine": "jasmine",
+    "build": "npx tsc"
+
   },
   "author": "Udacity",
   "license": "ISC",
