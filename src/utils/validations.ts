@@ -45,7 +45,7 @@ const orderSchema = Joi.object({
   productId: uuidValidation,
   quantity: Joi.number().required().min(1),
   userId: uuidValidation,
-  status: Joi.number().allow(['', 'active', 'complete'])
+  status: Joi.number().allow('', 'active', 'complete')
 })
 
-export { userSchema, categorySchema, productSchema, uuidSchema };
+export { userSchema, categorySchema, productSchema, uuidSchema, orderSchema };
