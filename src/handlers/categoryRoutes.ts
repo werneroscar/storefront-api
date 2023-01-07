@@ -25,7 +25,7 @@ const create = async (
 ): Promise<Category[] | void> => {
   try {
     const category = await CategoryStore.create(req.body.name);
-    res.status(StatusCodes.OK).json(category);
+    res.status(StatusCodes.CREATED).json(category);
   } catch (error) {
     next(error);
   }

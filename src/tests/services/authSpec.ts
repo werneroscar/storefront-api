@@ -90,6 +90,6 @@ describe('Auth middleware should return status 200 if token is present', () => {
       .post('/users')
       .set({ authorization: `Bearer ${token}` })
       .send({ firstName: 'John', lastName: 'Doe', password: userPassword });
-    expect(res.statusCode).toEqual(200);
+    expect(res.statusCode).toEqual(201);
   });
 });

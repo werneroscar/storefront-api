@@ -3,6 +3,7 @@ import userRoutes from './handlers/userRoutes';
 import categoryRoutes from './handlers/categoryRoutes';
 import errorHandlerMiddleware from './middleware/error-handler';
 import productRoutes from './handlers/productRoutes';
+import orderRoutes from './handlers/orderRoutes';
 // import { AuthService } from './services/Auth';
 
 const app: express.Application = express();
@@ -20,6 +21,7 @@ app.listen(PORT, function () {
 userRoutes(app);
 categoryRoutes(app);
 productRoutes(app);
+orderRoutes(app);
 
 app.use(errorHandlerMiddleware);
 

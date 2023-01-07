@@ -39,7 +39,7 @@ const create = async (
 ): Promise<Product | void> => {
   try {
     const product = await ProductStore.create(req.body);
-    res.status(StatusCodes.OK).json(product);
+    res.status(StatusCodes.CREATED).json(product);
   } catch (error) {
     next(error);
   }
