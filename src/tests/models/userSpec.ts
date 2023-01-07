@@ -161,11 +161,11 @@ describe('User store last name check', () => {
     );
   });
 
-  it('should should NOT throw BadRequestError if last name is contains hypen', async () => {
+  it('should should NOT throw BadRequestError if last name contains hypen', async () => {
     const user = {
       lastName: 'Logan',
       firstName: 'Last-name',
-      password: '6587',
+      password: userPassword,
     };
 
     const error = await getInvalidDetailsError(UserStore.create, user);
