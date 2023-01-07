@@ -35,6 +35,7 @@ describe('Product Store ', () => {
 
   it('should create product', async () => {
     const category = await CategoryStore.create('Ladies Wear');
+    console.log(category);
     testCategory = category;
     const product = await ProductStore.create({
       name: 'Test Product',
@@ -61,7 +62,7 @@ describe('Product Store ', () => {
     });
   });
 
-  it('should show prodcuts by category', async () => {
+  it('should show products by category', async () => {
     const productTwo = await ProductStore.create({
       name: 'Test Product two',
       price: 4.99,
