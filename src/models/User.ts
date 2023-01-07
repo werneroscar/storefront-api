@@ -6,52 +6,89 @@ import client from '../database';
 const { BCRYPT_PASSWORD, SALT_ROUNDS } = process.env;
 
 export class UserStore {
-  //@ts-ignore
-  static async index(): Promise<User[]> {}
-
-  static async create(details: UserDetails): Promise<User> {
-    if (details.firstName === undefined || details.firstName === null) {
+  /**
+   *
+   * @param firstName the first name to validate
+   * @returns void
+   */
+  static validateFirstName(firstName: string): void {
+    if (firstName === undefined || firstName === null) {
       throw new BadRequestError('Please provide first name');
     }
-    if (details.firstName.length < 1) {
+
+    if (firstName.length < 1) {
       throw new BadRequestError('First name must be at least 1 character long');
     }
-    if (!/^[a-zA-Z-]+$/.test(details.firstName)) {
+
+    if (!/^[a-zA-Z-]+$/.test(firstName)) {
       throw new BadRequestError(
         'First name must only contain alphabets and hyphens'
       );
     }
+  }
 
-    if (details.lastName === undefined || details.lastName === null) {
+  /**
+   *
+   * @param lastName the last name to validate
+   * @returns void
+   */
+  static validateLastName(lastName: string): void {
+    if (lastName === undefined || lastName === null) {
       throw new BadRequestError('Please provide last name');
     }
 
-    if (details.lastName.length < 1) {
+    if (lastName.length < 1) {
       throw new BadRequestError('Last name must be at least 1 character long');
     }
-    if (!/^[a-zA-Z-]+$/.test(details.lastName)) {
+
+    if (!/^[a-zA-Z-]+$/.test(lastName)) {
       throw new BadRequestError(
         'Last name must only contain alphabets and hyphens'
       );
     }
+  }
 
-    if (details.password === undefined || details.password === null) {
+  /**
+   *
+   * @param password the password to validate
+   * @returns void
+   */
+  static validatePassword(password: string): void {
+    if (password === undefined || password === null) {
       throw new BadRequestError('Please provide a password');
     }
 
-    if (details.password.length < 8) {
+    if (password.length < 8) {
       throw new BadRequestError(
         'Password must be at least 8 characters, inlude at lease one number, ' +
           'special character, upper and lower case alphabets'
       );
     }
 
-    if (!/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)/.test(details.password)) {
+    if (!/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)/.test(password)) {
       throw new BadRequestError(
         'Password must be at least 8 characters, inlude at lease one number, ' +
           'special character, upper and lower case alphabets'
       );
     }
+  }
+
+  //@ts-ignore
+  static async index(): Promise<User[]> {}
+
+  //@ts-ignore
+  static async show(id: string): Promise<User> {}
+
+  /**
+   *
+   * @param details details of the user to save
+   * @returns User the saved user
+   */
+  static async create(details: UserDetails): Promise<User> {
+    UserStore.validateFirstName(details.firstName);
+    UserStore.validateLastName(details.lastName);
+    UserStore.validatePassword(details.password);
+
     const conn = await client.connect();
     const createUserQuery =
       'INSERT INTO users (first_name, last_name, password_digest) ' +
@@ -74,7 +111,4 @@ export class UserStore {
       lastName: result.rows[0].last_name,
     };
   }
-
-  //@ts-ignore
-  static async show(id: string): Promise<User> {}
 }
