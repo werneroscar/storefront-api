@@ -39,7 +39,7 @@ describe('Product Store ', () => {
     const product = await ProductStore.create({
       name: 'Test Product',
       price: 2.99,
-      categoryId: +category.id
+      category: category.name
     });
     testProduct = product;
     expect(product).toEqual({
@@ -65,13 +65,13 @@ describe('Product Store ', () => {
     const productTwo = await ProductStore.create({
       name: 'Test Product two',
       price: 4.99,
-      categoryId: +testCategory.id
+      category: testCategory.name
     });
     testProductTwo = productTwo;
     const productThree = await ProductStore.create({
       name: 'Test Product',
       price: 46.43,
-      categoryId: +testCategory.id
+      category: testCategory.name
     });
     testProductThree = productThree;
 
@@ -80,7 +80,7 @@ describe('Product Store ', () => {
     const productFour = await ProductStore.create({
       name: 'Test Product',
       price: 46.43,
-      categoryId: +category.id
+      category: category.name
     });
     testProductFour = productFour;
     expect(await ProductStore.productsByCategory(testCategory.name)).toEqual([

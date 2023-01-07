@@ -32,7 +32,7 @@ const categorySchema = Joi.object({
 const productSchema = Joi.object({
   name: nameValidation('Product name'),
   price: Joi.number().required().min(1),
-  categoryId: Joi.number().required()
+  category: Joi.string().min(1).required()
 });
 
 const uuidSchema = Joi.object({

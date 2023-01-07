@@ -1,9 +1,11 @@
+import { QueryResult } from 'pg';
 import client from '../database';
+import { Category } from '../types/category';
 import { Product, ProductDetails } from '../types/product';
 import { productSchema, uuidSchema } from '../utils/validations';
+import { CategoryStore } from './Category';
 
 //TODO: id validations
-//TODO: let user pass category so I pick Id. Create if category is not already saved
 export class ProductStore {
   static async index(): Promise<Product[]> {
     const conn = await client.connect();
@@ -40,6 +42,7 @@ export class ProductStore {
     };
   }
 
+  //TODO: check if product already exists
   static async create(details: ProductDetails): Promise<Product> {
     const conn = await client.connect();
     await productSchema.validateAsync(details, { abortEarly: false });
@@ -47,18 +50,30 @@ export class ProductStore {
       'INSERT INTO products (product_name, price, category_id) ' +
       'VALUES ($1, $2, $3) RETURNING *';
 
-    const result = await conn.query(createProductQuery, [
-      details.name,
-      details.price,
-      details.categoryId
+    const categoryIdQuery =
+      'SELECT id from categories WHERE LOWER(category_name) = ($1)';
+    const categoryIdResult = await conn.query(categoryIdQuery, [
+      details.category.toLowerCase()
     ]);
 
-    const categoryQuery =
-      'SELECT category_name from categories where id = ($1)';
-    const categoryResult = await conn.query(categoryQuery, [
-      details.categoryId
-    ]);
+    let result: QueryResult<any>;
+    let newCategory: Category;
 
+    if (categoryIdResult.rowCount) {
+      result = await conn.query(createProductQuery, [
+        details.name,
+        details.price,
+        categoryIdResult.rows[0].id
+      ]);
+    } else {
+      newCategory = await CategoryStore.create(details.category);
+      result = await conn.query(createProductQuery, [
+        details.name,
+        details.price,
+        newCategory.id
+      ]);
+    }
+    // console.log(result);
     conn.release();
 
     return {
@@ -66,7 +81,7 @@ export class ProductStore {
       name: result.rows[0].product_name,
       price: result.rows[0].price,
       categoryId: result.rows[0].category_id,
-      category: categoryResult.rows[0].category_name
+      category: details.category
     };
   }
 

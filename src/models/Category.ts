@@ -11,6 +11,7 @@ export class CategoryStore {
     return result.rows;
   }
 
+  //TODO: check if category already exists
   static async create(name: string): Promise<Category> {
     const conn = await client.connect();
     const createCategoryQuery =

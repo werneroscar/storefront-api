@@ -1,10 +1,10 @@
 export interface ProductDetails {
   name: string;
   price: number;
-  categoryId: number;
+  category: string;
 }
 
 export interface Product extends ProductDetails {
   id: string;
-  category: string;
+  categoryId: number;
 }
