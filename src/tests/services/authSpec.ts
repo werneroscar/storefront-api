@@ -5,29 +5,28 @@ import { UnauthenticatedError } from '../../errors';
 
 describe('Auth service', () => {
   it('should have an generateToken method', () => {
-    //@ts-ignore
     expect(AuthService.generateToken).toBeDefined();
   });
 
   it('should throw Unauthenticated Error if password is wrong', () => {
-    //@ts-ignore
-    const error = getInvalidAuthPasswordError(AuthService.generateToken, '1234');
-    //@ts-ignore
-    expect(error).toEqual(new UnauthenticatedError('Invalid password'));
+    const error = getInvalidAuthPasswordError(
+      AuthService.generateToken,
+      '1234'
+    );
+
+    expect(error).toEqual(new UnauthenticatedError('Incorrect password'));
   });
 
   it('should NOT throw Unauthenticated Error if password is correct', () => {
     const error = getInvalidAuthPasswordError(
-      //@ts-ignore
       AuthService.generateToken,
       ADMIN_PASSWORD as string
     );
-    //@ts-ignore
+
     expect(error).toBeUndefined();
   });
 
   it('should return token if password is correct', () => {
-    //@ts-ignore
-    expect(AuthService.generateToken(ADMIN_PASSWORD)).toBeTruthy();
+    expect(AuthService.generateToken(ADMIN_PASSWORD as string)).toBeTruthy();
   });
 });

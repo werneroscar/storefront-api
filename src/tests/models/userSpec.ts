@@ -17,7 +17,7 @@ describe('User store', () => {
 });
 
 describe('Userstore index function', () => {
-  it('should be empty to start with', async() => {
+  it('should be empty to start with', async () => {
     expect(await UserStore.index()).toEqual([]);
   });
 
@@ -25,26 +25,26 @@ describe('Userstore index function', () => {
     const firstUser = await UserStore.create({
       firstName: 'Micheal',
       lastName: 'Lopez',
-      password: userPassword,
+      password: userPassword
     });
 
     const secondUser = await UserStore.create({
       firstName: 'Chris',
       lastName: 'Bratford',
-      password: userPassword,
+      password: userPassword
     });
 
     expect(await UserStore.index()).toEqual([
       {
         id: firstUser.id,
         firstName: firstUser.firstName,
-        lastName: firstUser.lastName,
+        lastName: firstUser.lastName
       },
       {
         id: secondUser.id,
         firstName: secondUser.firstName,
-        lastName: secondUser.lastName,
-      },
+        lastName: secondUser.lastName
+      }
     ]);
   });
 });
@@ -54,13 +54,13 @@ describe('User store create function', () => {
     const createdUser = await UserStore.create({
       firstName: 'Danny',
       lastName: 'Bontii',
-      password: userPassword,
+      password: userPassword
     });
 
     expect(createdUser).toEqual({
       id: createdUser.id,
       firstName: 'Danny',
-      lastName: 'Bontii',
+      lastName: 'Bontii'
     });
   });
 
@@ -68,7 +68,7 @@ describe('User store create function', () => {
     const createdUser = await UserStore.create({
       firstName: 'Jax',
       lastName: 'Brigss',
-      password: userPassword,
+      password: userPassword
     });
 
     //@ts-ignore
@@ -82,7 +82,7 @@ describe('User store first name check', () => {
     const user = {
       firstName: undefined,
       lastName: 'Mitchel',
-      password: userPassword,
+      password: userPassword
     };
 
     //@ts-ignore
@@ -94,7 +94,7 @@ describe('User store first name check', () => {
     const user = {
       firstName: '',
       lastName: 'Logan',
-      password: userPassword,
+      password: userPassword
     };
 
     const error = await getInvalidDetailsError(UserStore.create, user);
@@ -107,7 +107,7 @@ describe('User store first name check', () => {
     const user = {
       firstName: 'Name1234',
       lastName: 'Logan',
-      password: userPassword,
+      password: userPassword
     };
 
     const error = await getInvalidDetailsError(UserStore.create, user);
@@ -120,7 +120,7 @@ describe('User store first name check', () => {
     const user = {
       firstName: 'd@niel',
       lastName: 'Logan',
-      password: userPassword,
+      password: userPassword
     };
 
     const error = await getInvalidDetailsError(UserStore.create, user);
@@ -133,7 +133,7 @@ describe('User store first name check', () => {
     const user = {
       firstName: 'First-name',
       lastName: 'Logan',
-      password: userPassword,
+      password: userPassword
     };
 
     const error = await getInvalidDetailsError(UserStore.create, user);
@@ -147,7 +147,7 @@ describe('User store last name check', () => {
     const user = {
       firstName: 'Samuel',
       lastName: undefined,
-      password: userPassword,
+      password: userPassword
     };
 
     //@ts-ignore
@@ -159,7 +159,7 @@ describe('User store last name check', () => {
     const user = {
       firstName: 'Micheal',
       lastName: '',
-      password: '6587',
+      password: '6587'
     };
 
     const error = await getInvalidDetailsError(UserStore.create, user);
@@ -172,7 +172,7 @@ describe('User store last name check', () => {
     const user = {
       firstName: 'Logan',
       lastName: 'Name1234',
-      password: '6587',
+      password: '6587'
     };
 
     const error = await getInvalidDetailsError(UserStore.create, user);
@@ -185,7 +185,7 @@ describe('User store last name check', () => {
     const user = {
       firstName: 'Logan',
       lastName: 'd@niel',
-      password: '6587',
+      password: '6587'
     };
 
     const error = await getInvalidDetailsError(UserStore.create, user);
@@ -198,7 +198,7 @@ describe('User store last name check', () => {
     const user = {
       lastName: 'Logan',
       firstName: 'Last-name',
-      password: userPassword,
+      password: userPassword
     };
 
     const error = await getInvalidDetailsError(UserStore.create, user);
@@ -211,7 +211,7 @@ describe('User store password check', () => {
   let user = {
     firstName: 'George',
     lastName: 'White',
-    password: '',
+    password: ''
   };
   const errorMessage =
     'Password must be at least 8 characters, inlude at lease one number, ' +
@@ -222,7 +222,7 @@ describe('User store password check', () => {
     let user = {
       firstName: 'Joyce',
       lastName: 'Washington',
-      password: undefined,
+      password: undefined
     };
     //@ts-ignore
     const error = await getInvalidDetailsError(UserStore.create, user);

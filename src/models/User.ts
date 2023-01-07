@@ -74,13 +74,12 @@ export class UserStore {
   }
 
   /**
-   * 
+   *
    * @returns all users
    */
   static async index(): Promise<User[]> {
     const conn = await client.connect();
-    const findUserQuery =
-      'SELECT id, first_name, last_name FROM users';
+    const findUserQuery = 'SELECT id, first_name, last_name FROM users';
     const result = await conn.query(findUserQuery);
     return result.rows.map((row) => {
       return { id: row.id, firstName: row.first_name, lastName: row.last_name };
@@ -113,13 +112,13 @@ export class UserStore {
     const result = await conn.query(createUserQuery, [
       details.firstName,
       details.lastName,
-      hash,
+      hash
     ]);
 
     return {
       id: result.rows[0].id,
       firstName: result.rows[0].first_name,
-      lastName: result.rows[0].last_name,
+      lastName: result.rows[0].last_name
     };
   }
 }

@@ -11,7 +11,7 @@ const {
   TEST_DB,
   TEST_DB_USER,
   TEST_DB_PASS,
-  ENV,
+  ENV
 } = process.env;
 
 let client: Pool;
@@ -21,14 +21,14 @@ if (ENV === 'dev') {
     host: DEV_DB_HOST,
     user: DEV_DB_USER,
     database: DEV_DB,
-    password: DEV_DB_PASS,
+    password: DEV_DB_PASS
   });
 } else {
   client = new Pool({
     host: TEST_DB_HOST,
     user: TEST_DB_USER,
     database: TEST_DB,
-    password: TEST_DB_PASS,
+    password: TEST_DB_PASS
   });
 }
 
