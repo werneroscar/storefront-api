@@ -1,6 +1,8 @@
 import { Application, NextFunction, Request, Response } from 'express';
-import { UserStore } from '../models/User';
+
 import { StatusCodes } from 'http-status-codes';
+
+import { UserStore } from '../models/User';
 import { AuthService } from '../services/Auth';
 
 const index = async (

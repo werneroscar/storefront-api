@@ -5,20 +5,9 @@ const nameValidation = (name: string): Joi.StringSchema<string> => {
     .required()
     .min(1)
     .max(50)
-    .pattern(/^[a-zA-Z-]+$/)
+    .pattern(/^[a-zA-Z\s\-]+$/)
     .messages({
-      'string.pattern.base': `${name} must only contain alphabets and hyphens`
-    });
-};
-
-const idValidation = (name: string): Joi.StringSchema<string> => {
-  return Joi.string()
-    .required()
-    .pattern(
-      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/
-    )
-    .messages({
-      'string.pattern.base': `Invalid ${name} id`
+      'string.pattern.base': `${name} must only contain alphabets and hyphens and whitespace`
     });
 };
 
