@@ -11,6 +11,8 @@ const nameValidation = (name: string): Joi.StringSchema<string> => {
     });
 };
 
+const uuidValidation = Joi.string().uuid().required();
+
 const userSchema = Joi.object({
   firstName: nameValidation('First name'),
   lastName: nameValidation('Last name'),
@@ -36,7 +38,14 @@ const productSchema = Joi.object({
 });
 
 const uuidSchema = Joi.object({
-  id: Joi.string().uuid().required()
+  id: uuidValidation
 });
+
+const orderSchema = Joi.object({
+  productId: uuidValidation,
+  quantity: Joi.number().required().min(1),
+  userId: uuidValidation,
+  status: Joi.number().allow(['', 'active', 'complete'])
+})
 
 export { userSchema, categorySchema, productSchema, uuidSchema };
