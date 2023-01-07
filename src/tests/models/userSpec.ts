@@ -16,7 +16,40 @@ describe('User store', () => {
   });
 });
 
-describe('User store functionality', () => {
+describe('User index function', () => {
+  it('should be empty to start with', () => {
+    expect(UserStore.index).toEqual([]);
+  });
+
+  it('should contain all created users', async () => {
+    const firstUser = await UserStore.create({
+      firstName: 'Micheal',
+      lastName: 'Lopez',
+      password: userPassword,
+    });
+
+    const secondUser = await UserStore.create({
+      firstName: 'Chris',
+      lastName: 'Bratford',
+      password: userPassword,
+    });
+
+    expect(await UserStore.index()).toEqual([
+      {
+        id: firstUser.id,
+        firstName: firstUser.firstName,
+        lastName: firstUser.lastName,
+      },
+      {
+        id: secondUser.id,
+        firstName: secondUser.firstName,
+        lastName: secondUser.lastName,
+      },
+    ]);
+  });
+});
+
+describe('User store create function', () => {
   it('should create a user', async () => {
     const createdUser = await UserStore.create({
       firstName: 'Danny',
