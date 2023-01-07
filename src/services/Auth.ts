@@ -32,7 +32,7 @@ export class AuthService {
 
     try {
       jwt.verify(token, JWT_SECRET as string);
-      
+
       return next();
     } catch (error) {
       return next(new UnauthenticatedError('Unauthorized access'));

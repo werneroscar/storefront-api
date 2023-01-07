@@ -5,7 +5,7 @@ import {
   getInvalidIdError
 } from '../../utils/get-errors';
 
-import {ValidationError} from 'joi';
+import { ValidationError } from 'joi';
 
 const userPassword = 'User@123';
 
@@ -57,7 +57,7 @@ describe('Userstore index method', () => {
 describe('Userstore show method', () => {
   it('should throw BadRequestError if user id is invalid', async () => {
     const error = await getInvalidIdError(UserStore.show, '5');
-    expect(error).toEqual(new BadRequestError('Invalid user id'));
+    expect(error).toBeInstanceOf(ValidationError);
   });
 
   it('should throw BadRequestError if no user has the given id', async () => {

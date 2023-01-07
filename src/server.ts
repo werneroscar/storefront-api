@@ -1,8 +1,7 @@
 import express from 'express';
 import userRoutes from './handlers/userRoutes';
 import errorHandlerMiddleware from './middleware/error-handler';
-import { AuthService } from './services/Auth';
-// const {ADMIN_PASSWORD} = process.env;
+// import { AuthService } from './services/Auth';
 
 const app: express.Application = express();
 const address: string = '0.0.0.0:3000';

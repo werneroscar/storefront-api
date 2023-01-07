@@ -11,6 +11,17 @@ const nameValidation = (name: string): Joi.StringSchema<string> => {
     });
 };
 
+const idValidation = (name: string): Joi.StringSchema<string> => {
+  return Joi.string()
+    .required()
+    .pattern(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/
+    )
+    .messages({
+      'string.pattern.base': `Invalid ${name} id`
+    });
+};
+
 const userSchema = Joi.object({
   firstName: nameValidation('First name'),
   lastName: nameValidation('Last name'),
@@ -35,4 +46,8 @@ const productSchema = Joi.object({
   categoryId: Joi.number().required()
 });
 
-export { userSchema, categorySchema, productSchema };
+const uuidSchema = Joi.object({
+  id: Joi.string().uuid().required()
+});
+
+export { userSchema, categorySchema, productSchema, uuidSchema };

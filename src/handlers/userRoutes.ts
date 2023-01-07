@@ -3,14 +3,30 @@ import { UserStore } from '../models/User';
 import { StatusCodes } from 'http-status-codes';
 import { AuthService } from '../services/Auth';
 
-const index = async (_req: Request, res: Response): Promise<Response> => {
-  const users = await UserStore.index();
-  return res.status(StatusCodes.OK).json(users);
+const index = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  try {
+    const users = await UserStore.index();
+    return res.status(StatusCodes.OK).json(users);
+  } catch (error) {
+    next(error);
+  }
 };
 
-const show = async (req: Request, res: Response): Promise<Response | void> => {
-  const user = await UserStore.show(req.params.id);
-  return res.status(StatusCodes.OK).json(user);
+const show = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  try {
+    const user = await UserStore.show(req.params.id);
+    return res.status(StatusCodes.OK).json(user);
+  } catch (error) {
+    next(error);
+  }
 };
 
 const create = async (
