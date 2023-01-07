@@ -32,7 +32,6 @@ export class AuthService {
 
     try {
       jwt.verify(token, JWT_SECRET as string);
-      console.log('auth middleware done...');
       
       return next();
     } catch (error) {

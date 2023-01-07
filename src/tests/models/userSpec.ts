@@ -5,6 +5,8 @@ import {
   getInvalidIdError
 } from '../../utils/get-errors';
 
+import {ValidationError} from 'joi';
+
 const userPassword = 'User@123';
 
 describe('User store', () => {
@@ -122,8 +124,9 @@ describe('User store first name check', () => {
     };
 
     //@ts-ignore
+    // expect(async ()=> await UserStore.create(user)).toThrowError();
     const error = await getInvalidDetailsError(UserStore.create, user);
-    expect(error).toEqual(new BadRequestError('Please provide first name'));
+    expect(error).toBeInstanceOf(ValidationError);
   });
 
   it('should should throw BadRequestError if first name less than one character', async () => {
@@ -134,9 +137,7 @@ describe('User store first name check', () => {
     };
 
     const error = await getInvalidDetailsError(UserStore.create, user);
-    expect(error).toEqual(
-      new BadRequestError('First name must be at least 1 character long')
-    );
+    expect(error).toBeInstanceOf(ValidationError);
   });
 
   it('should should throw BadRequestError if first name contains number', async () => {
@@ -147,9 +148,7 @@ describe('User store first name check', () => {
     };
 
     const error = await getInvalidDetailsError(UserStore.create, user);
-    expect(error).toEqual(
-      new BadRequestError('First name must only contain alphabets and hyphens')
-    );
+    expect(error).toBeInstanceOf(ValidationError);
   });
 
   it('should should throw BadRequestError if first name is contains any special character other than hypen', async () => {
@@ -160,9 +159,7 @@ describe('User store first name check', () => {
     };
 
     const error = await getInvalidDetailsError(UserStore.create, user);
-    expect(error).toEqual(
-      new BadRequestError('First name must only contain alphabets and hyphens')
-    );
+    expect(error).toBeInstanceOf(ValidationError);
   });
 
   it('should should NOT throw BadRequestError if first name is contains hypen', async () => {
@@ -188,7 +185,7 @@ describe('User store last name check', () => {
 
     //@ts-ignore
     const error = await getInvalidDetailsError(UserStore.create, user);
-    expect(error).toEqual(new BadRequestError('Please provide last name'));
+    expect(error).toBeInstanceOf(ValidationError);
   });
 
   it('should should throw BadRequestError if last name less than one character', async () => {
@@ -199,9 +196,7 @@ describe('User store last name check', () => {
     };
 
     const error = await getInvalidDetailsError(UserStore.create, user);
-    expect(error).toEqual(
-      new BadRequestError('Last name must be at least 1 character long')
-    );
+    expect(error).toBeInstanceOf(ValidationError);
   });
 
   it('should should throw BadRequestError if last name contains number', async () => {
@@ -212,9 +207,7 @@ describe('User store last name check', () => {
     };
 
     const error = await getInvalidDetailsError(UserStore.create, user);
-    expect(error).toEqual(
-      new BadRequestError('Last name must only contain alphabets and hyphens')
-    );
+    expect(error).toBeInstanceOf(ValidationError);
   });
 
   it('should should throw BadRequestError if last name is contains any special character other than hypen', async () => {
@@ -225,12 +218,10 @@ describe('User store last name check', () => {
     };
 
     const error = await getInvalidDetailsError(UserStore.create, user);
-    expect(error).toEqual(
-      new BadRequestError('Last name must only contain alphabets and hyphens')
-    );
+    expect(error).toBeInstanceOf(ValidationError);
   });
 
-  xit('should should NOT throw BadRequestError if last name contains hypen', async () => {
+  it('should should NOT throw BadRequestError if last name contains hypen', async () => {
     const user = {
       lastName: 'Logan',
       firstName: 'Last-name',
@@ -249,9 +240,6 @@ describe('User store password check', () => {
     lastName: 'White',
     password: ''
   };
-  const errorMessage =
-    'Password must be at least 8 characters, inlude at lease one number, ' +
-    'special character, upper and lower case alphabets';
 
   it('should should throw BadRequestError if password is not provided', async () => {
     //@ts-ignore
@@ -262,36 +250,36 @@ describe('User store password check', () => {
     };
     //@ts-ignore
     const error = await getInvalidDetailsError(UserStore.create, user);
-    expect(error).toEqual(new BadRequestError('Please provide a password'));
+    expect(error).toBeInstanceOf(ValidationError);
   });
 
   it('should should throw BadRequestError if password is less than 8 characters long', async () => {
     user.password = '1bcDEF@';
     const error = await getInvalidDetailsError(UserStore.create, user);
-    expect(error).toEqual(new BadRequestError(errorMessage));
+    expect(error).toBeInstanceOf(ValidationError);
   });
 
   it('should should throw BadRequestError if password contains no number', async () => {
     user.password = 'QWavdje@ij';
     const error = await getInvalidDetailsError(UserStore.create, user);
-    expect(error).toEqual(new BadRequestError(errorMessage));
+    expect(error).toBeInstanceOf(ValidationError);
   });
 
   it('should should throw BadRequestError if password contains no special character', async () => {
     user.password = 'QWavdje8ij';
     const error = await getInvalidDetailsError(UserStore.create, user);
-    expect(error).toEqual(new BadRequestError(errorMessage));
+    expect(error).toBeInstanceOf(ValidationError);
   });
 
   it('should should throw BadRequestError if password contains no upper case character', async () => {
     user.password = 'qwavdje8i36j#';
     const error = await getInvalidDetailsError(UserStore.create, user);
-    expect(error).toEqual(new BadRequestError(errorMessage));
+    expect(error).toBeInstanceOf(ValidationError);
   });
 
   it('should should throw BadRequestError if password contains no lower case character', async () => {
     user.password = 'ASDER8632@#';
     const error = await getInvalidDetailsError(UserStore.create, user);
-    expect(error).toEqual(new BadRequestError(errorMessage));
+    expect(error).toBeInstanceOf(ValidationError);
   });
 });

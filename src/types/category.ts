@@ -1,7 +1,4 @@
-export interface CategoryDetails {
-  name: string;
-}
-
-export interface Category extends CategoryDetails {
+export interface Category {
   id: string;
+  name: string;
 }

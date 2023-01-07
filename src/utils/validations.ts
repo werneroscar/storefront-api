@@ -5,7 +5,7 @@ const nameValidation = (name: string): Joi.StringSchema<string> => {
     .required()
     .min(1)
     .max(50)
-    .pattern(new RegExp('^[a-zA-Z-]+$'))
+    .pattern(/^[a-zA-Z-]+$/)
     .messages({
       'string.pattern.base': `${name} must only contain alphabets and hyphens`
     });
@@ -17,7 +17,7 @@ const userSchema = Joi.object({
   password: Joi.string()
     .required()
     .min(8)
-    .pattern(new RegExp('(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)'))
+    .pattern(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)/)
     .messages({
       'string.pattern.base':
         'Password must be at least 8 characters, inlude at lease one number, ' +

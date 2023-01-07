@@ -82,6 +82,7 @@ export class UserStore {
     const conn = await client.connect();
     const findUsersQuery = 'SELECT id, first_name, last_name FROM users';
     const result = await conn.query(findUsersQuery);
+    conn.release();
     return result.rows.map((row) => {
       return { id: row.id, firstName: row.first_name, lastName: row.last_name };
     });
@@ -104,7 +105,7 @@ export class UserStore {
     if (result.rowCount < 1) {
       throw new BadRequestError('There is no user with id: ' + id);
     }
-
+    conn.release();
     return {
       id: result.rows[0].id,
       firstName: result.rows[0].first_name,
@@ -139,7 +140,7 @@ export class UserStore {
         details.lastName,
         hash
       ]);
-
+      conn.release();
       return {
         id: result.rows[0].id,
         firstName: result.rows[0].first_name,
