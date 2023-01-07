@@ -2,6 +2,8 @@ import { UserStore } from '../../models/User';
 import { BadRequestError } from '../../errors';
 import { getInvalidDetailsError } from '../../utils/get-errors';
 
+const userPassword = 'User@123';
+
 describe('User store', () => {
   it('should have an index method', () => {
     expect(UserStore.index).toBeDefined();
@@ -14,12 +16,12 @@ describe('User store', () => {
   });
 });
 
-describe('User store', () => {
+describe('User store functionality', () => {
   it('should create a user', async () => {
     const createdUser = await UserStore.create({
       firstName: 'Danny',
       lastName: 'Bontii',
-      password: '1234',
+      password: userPassword,
     });
 
     expect(createdUser).toEqual({
@@ -33,19 +35,21 @@ describe('User store', () => {
     const createdUser = await UserStore.create({
       firstName: 'Jax',
       lastName: 'Brigss',
-      password: '1234',
+      password: userPassword,
     });
 
     //@ts-ignore
-    expect(createdUser.password).toBeUndefined;
+    expect(createdUser.password).toBeUndefined();
   });
+});
 
-  it('should should throw error if first name is not provided', async () => {
+describe('User store first name check', () => {
+  it('should should throw BadRequestError if first name is not provided', async () => {
     //@ts-ignore
     const user = {
       firstName: undefined,
       lastName: 'Mitchel',
-      password: 'Mitch123',
+      password: userPassword,
     };
 
     //@ts-ignore
@@ -53,11 +57,11 @@ describe('User store', () => {
     expect(error).toEqual(new BadRequestError('Please provide first name'));
   });
 
-  it('should should throw error if first name less than one character', async () => {
+  it('should should throw BadRequestError if first name less than one character', async () => {
     const user = {
       firstName: '',
       lastName: 'Logan',
-      password: '6587',
+      password: userPassword,
     };
 
     const error = await getInvalidDetailsError(UserStore.create, user);
@@ -66,12 +70,51 @@ describe('User store', () => {
     );
   });
 
-  it('should should throw error if last name is not provided', async () => {
+  it('should should throw BadRequestError if first name contains number', async () => {
+    const user = {
+      firstName: 'Name1234',
+      lastName: 'Logan',
+      password: userPassword,
+    };
+
+    const error = await getInvalidDetailsError(UserStore.create, user);
+    expect(error).toEqual(
+      new BadRequestError('First name must only contain alphabets and hyphens')
+    );
+  });
+
+  it('should should throw BadRequestError if first name is contains any special character other than hypen', async () => {
+    const user = {
+      firstName: 'd@niel',
+      lastName: 'Logan',
+      password: userPassword,
+    };
+
+    const error = await getInvalidDetailsError(UserStore.create, user);
+    expect(error).toEqual(
+      new BadRequestError('First name must only contain alphabets and hyphens')
+    );
+  });
+
+  it('should should NOT throw BadRequestError if first name is contains hypen', async () => {
+    const user = {
+      firstName: 'First-name',
+      lastName: 'Logan',
+      password: userPassword,
+    };
+
+    const error = await getInvalidDetailsError(UserStore.create, user);
+    expect(error).toBeUndefined();
+  });
+});
+
+describe('User store last name check', () => {
+  it('should should throw BadRequestError if last name is not provided', async () => {
     //@ts-ignore
     const user = {
       firstName: 'Samuel',
       lastName: undefined,
-      password: 'sam',
+      password: userPassword,
     };
 
     //@ts-ignore
@@ -79,7 +122,7 @@ describe('User store', () => {
     expect(error).toEqual(new BadRequestError('Please provide last name'));
   });
 
-  it('should should throw error if last name less than one character', async () => {
+  it('should should throw BadRequestError if last name less than one character', async () => {
     const user = {
       firstName: 'Micheal',
       lastName: '',
@@ -92,16 +135,94 @@ describe('User store', () => {
     );
   });
 
-  it('should should throw error if password is not provided', async () => {
-    //@ts-ignore
+  it('should should throw BadRequestError if last name contains number', async () => {
     const user = {
-      firstName: 'George',
-      lastName: 'White',
-      password: undefined,
+      firstName: 'Logan',
+      lastName: 'Name1234',
+      password: '6587',
     };
 
+    const error = await getInvalidDetailsError(UserStore.create, user);
+    expect(error).toEqual(
+      new BadRequestError('Last name must only contain alphabets and hyphens')
+    );
+  });
+
+  it('should should throw BadRequestError if last name is contains any special character other than hypen', async () => {
+    const user = {
+      firstName: 'Logan',
+      lastName: 'd@niel',
+      password: '6587',
+    };
+
+    const error = await getInvalidDetailsError(UserStore.create, user);
+    expect(error).toEqual(
+      new BadRequestError('Last name must only contain alphabets and hyphens')
+    );
+  });
+
+  it('should should NOT throw BadRequestError if last name is contains hypen', async () => {
+    const user = {
+      lastName: 'Logan',
+      firstName: 'Last-name',
+      password: '6587',
+    };
+
+    const error = await getInvalidDetailsError(UserStore.create, user);
+    expect(error).toBeUndefined();
+  });
+});
+
+describe('User store password check', () => {
+  //@ts-ignore
+  let user = {
+    firstName: 'George',
+    lastName: 'White',
+    password: '',
+  };
+  const errorMessage =
+    'Password must be at least 8 characters, inlude at lease one number, ' +
+    'special character, upper and lower case alphabets';
+
+  it('should should throw BadRequestError if password is not provided', async () => {
+    //@ts-ignore
+    let user = {
+      firstName: 'Joyce',
+      lastName: 'Washington',
+      password: undefined,
+    };
     //@ts-ignore
     const error = await getInvalidDetailsError(UserStore.create, user);
     expect(error).toEqual(new BadRequestError('Please provide a password'));
+  });
+
+  it('should should throw BadRequestError if password is less than 8 characters long', async () => {
+    user.password = '1bcDEF@';
+    const error = await getInvalidDetailsError(UserStore.create, user);
+    expect(error).toEqual(new BadRequestError(errorMessage));
+  });
+
+  it('should should throw BadRequestError if password contains no number', async () => {
+    user.password = 'QWavdje@ij';
+    const error = await getInvalidDetailsError(UserStore.create, user);
+    expect(error).toEqual(new BadRequestError(errorMessage));
+  });
+
+  it('should should throw BadRequestError if password contains no special character', async () => {
+    user.password = 'QWavdje8ij';
+    const error = await getInvalidDetailsError(UserStore.create, user);
+    expect(error).toEqual(new BadRequestError(errorMessage));
+  });
+
+  it('should should throw BadRequestError if password contains no upper case character', async () => {
+    user.password = 'qwavdje8i36j#';
+    const error = await getInvalidDetailsError(UserStore.create, user);
+    expect(error).toEqual(new BadRequestError(errorMessage));
+  });
+
+  it('should should throw BadRequestError if password contains no lower case character', async () => {
+    user.password = 'ASDER8632@#';
+    const error = await getInvalidDetailsError(UserStore.create, user);
+    expect(error).toEqual(new BadRequestError(errorMessage));
   });
 });
