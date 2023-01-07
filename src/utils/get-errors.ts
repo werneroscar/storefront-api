@@ -16,4 +16,20 @@ const getInvalidDetailsError = async (
   return error;
 };
 
-export { getInvalidDetailsError };
+const getInvalidAuthPasswordError =  (
+  fn: Function,
+  password: string
+): unknown => {
+  let error;
+
+  try {
+     fn(password);
+    return undefined;
+  } catch (e) {
+    error = e;
+  }
+
+  return error;
+};
+
+export { getInvalidDetailsError, getInvalidAuthPasswordError };

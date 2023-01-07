@@ -30,6 +30,7 @@
     "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.14",
     "@types/jasmine": "^4.3.0",
+    "@types/jsonwebtoken": "^9.0.0",
     "@types/node": "^18.11.10",
     "@types/pg": "^8.6.6",
     "@types/supertest": "^2.0.12",
