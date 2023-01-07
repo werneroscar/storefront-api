@@ -12,6 +12,7 @@ import app from '../../server';
 import supertest = require('supertest');
 const req = supertest(app);
 
+
 describe('Auth service', () => {
   it('should have an generateToken method', () => {
     expect(AuthService.generateToken).toBeDefined();
@@ -93,3 +94,4 @@ describe('Auth middleware should return status 200 if token is present', () => {
     expect(res.statusCode).toEqual(200);
   });
 });
+

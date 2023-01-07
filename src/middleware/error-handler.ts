@@ -1,4 +1,4 @@
-import { CustomError } from '../errors';
+import { CustomError, UnauthenticatedError } from '../errors';
 import { StatusCodes } from 'http-status-codes';
 
 import { Request, Response, NextFunction } from 'express';
@@ -9,6 +9,7 @@ const errorHandlerMiddleware = (
   res: Response,
   _next: NextFunction
 ) => {
+
   if (err instanceof CustomError) {
     return res.status(err.statusCode).json({ message: err.message });
   }
