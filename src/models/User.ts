@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import { User, UserDetails } from '../types/user';
 import { BadRequestError } from '../errors';
 import client from '../database';
+import { userSchema } from '../utils/validations';
 
 const { BCRYPT_PASSWORD, SALT_ROUNDS } = process.env;
 
@@ -117,30 +118,35 @@ export class UserStore {
    * @returns User the saved user
    */
   static async create(details: UserDetails): Promise<User> {
-    UserStore.validateFirstName(details.firstName);
-    UserStore.validateLastName(details.lastName);
-    UserStore.validatePassword(details.password);
+    try {
+      // UserStore.validateFirstName(details.firstName);
+      // UserStore.validateLastName(details.lastName);
+      // UserStore.validatePassword(details.password);
+      await userSchema.validateAsync(details, { abortEarly: false });
 
-    const conn = await client.connect();
-    const createUserQuery =
-      'INSERT INTO users (first_name, last_name, password_digest) ' +
-      'VALUES($1, $2, $3) RETURNING id, first_name, last_name';
+      const conn = await client.connect();
+      const createUserQuery =
+        'INSERT INTO users (first_name, last_name, password_digest) ' +
+        'VALUES($1, $2, $3) RETURNING id, first_name, last_name';
 
-    const hash = bcrypt.hashSync(
-      details.password + BCRYPT_PASSWORD,
-      parseInt(SALT_ROUNDS as string)
-    );
+      const hash = bcrypt.hashSync(
+        details.password + BCRYPT_PASSWORD,
+        parseInt(SALT_ROUNDS as string)
+      );
 
-    const result = await conn.query(createUserQuery, [
-      details.firstName,
-      details.lastName,
-      hash
-    ]);
+      const result = await conn.query(createUserQuery, [
+        details.firstName,
+        details.lastName,
+        hash
+      ]);
 
-    return {
-      id: result.rows[0].id,
-      firstName: result.rows[0].first_name,
-      lastName: result.rows[0].last_name
-    };
+      return {
+        id: result.rows[0].id,
+        firstName: result.rows[0].first_name,
+        lastName: result.rows[0].last_name
+      };
+    } catch (error) {
+      throw error;
+    }
   }
 }
