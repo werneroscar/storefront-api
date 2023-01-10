@@ -2,6 +2,7 @@ import { Category } from '../types/category';
 import { CategoryRepository } from '../repositories/CategoryRepository';
 import { StatusCodes } from 'http-status-codes';
 import { CustomError } from '../errors';
+import { categorySchema } from '../utils/validations';
 
 export class CategoryStore {
   static async index(): Promise<Category[]> {
@@ -9,6 +10,7 @@ export class CategoryStore {
   }
 
   static async create(name: string): Promise<Category> {
+    await categorySchema.validateAsync({ name });
     const categoryExits = await CategoryRepository.findByName(name);
     if (categoryExits) {
       throw new CustomError(

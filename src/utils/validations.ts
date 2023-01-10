@@ -5,9 +5,9 @@ const nameValidation = (name: string): Joi.StringSchema<string> => {
     .required()
     .min(1)
     .max(50)
-    .pattern(/^[a-zA-Z\s\-]+$/)
+    .pattern(/^[a-zA-Z\s\-\']+$/)
     .messages({
-      'string.pattern.base': `${name} must only contain alphabets and hyphens and whitespace`
+      'string.pattern.base': `${name} must only contain alphabets and hyphens, apostrophe and whitespace`
     });
 };
 
@@ -41,11 +41,28 @@ const uuidSchema = Joi.object({
   id: uuidValidation
 });
 
-const orderSchema = Joi.object({
-  productId: uuidValidation,
-  quantity: Joi.number().required().min(1),
-  userId: uuidValidation,
-  status: Joi.string().valid('', 'active', 'complete')
+const orderValidations = Joi.object({
+  productId: uuidValidation.label('product id of order'),
+  quantity: Joi.number().required().min(1).label('quantity of order'),
+  userId: uuidValidation.label('user id of order'),
+  status: Joi.string().valid('', 'active', 'complete').label('status of order')
 });
 
-export { userSchema, categorySchema, productSchema, uuidSchema, orderSchema };
+const orderSchema = Joi.array().items(orderValidations);
+
+const completeOrderValidations = Joi.object({
+  orderId: uuidValidation.label('orderId'),
+  userId: uuidValidation.label('userId'),
+  productId: uuidValidation.label('productId')
+});
+
+const completOrderSchema = Joi.array().items(completeOrderValidations);
+
+export {
+  userSchema,
+  categorySchema,
+  productSchema,
+  uuidSchema,
+  orderSchema,
+  completOrderSchema
+};

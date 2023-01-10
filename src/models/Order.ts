@@ -1,7 +1,11 @@
 import { OrderRepository } from '../repositories/OrderRepository';
 import { ProductRepository } from '../repositories/ProductRepository';
 import { CompletOrderDetails, Order, OrderDetails } from '../types/order';
-import { orderSchema } from '../utils/validations';
+import {
+  completOrderSchema,
+  orderSchema,
+  uuidSchema
+} from '../utils/validations';
 
 export class OrderStore {
   static async calculateCost(details: OrderDetails): Promise<string> {
@@ -13,9 +17,8 @@ export class OrderStore {
   static async create(
     details: OrderDetails | OrderDetails[]
   ): Promise<Order | Order[]> {
-    // await orderSchema.validateAsync(details, { abortEarly: false });
-    // console.log('truth', Array.isArray(details))
     if (Array.isArray(details)) {
+      await orderSchema.validateAsync(details);
       for (let detail of details) {
         detail.cost = await OrderStore.calculateCost(detail);
       }
@@ -23,32 +26,30 @@ export class OrderStore {
       return await OrderRepository.saveAll(details);
     }
 
+    await orderSchema.validateAsync([details]);
     details.cost = await OrderStore.calculateCost(details);
     return await OrderRepository.save(details);
   }
 
   static async currentOrdersByUser(id: string): Promise<Order[]> {
-    //TODO: validate id
+    await uuidSchema.validateAsync({ id });
     return await OrderRepository.findByCurrentUserOrders(id);
   }
 
   static async completedOrdersByUser(id: string): Promise<Order[]> {
-    //TODO: validate id
-    const completedOrders = await OrderRepository.findByCompletedUserOrders(id);
-    return completedOrders;
+    await uuidSchema.validateAsync({ id });
+    return await OrderRepository.findByCompletedUserOrders(id);
   }
 
   static async completeUserOrder(
     details: CompletOrderDetails | CompletOrderDetails[]
   ): Promise<Order | Order[]> {
-    //todo: validate details
-    // console.log('comp ord dets',details)
-    // console.log('truth', Array.isArray(details))
-
     if (Array.isArray(details)) {
+      await completOrderSchema.validateAsync(details);
       return await OrderRepository.completeAll(details);
     }
 
+    await completOrderSchema.validateAsync([details]);
     return await OrderRepository.complete(details);
   }
 }

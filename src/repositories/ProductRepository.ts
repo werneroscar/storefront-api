@@ -1,9 +1,9 @@
 import { QueryResult } from 'pg';
 
 import client from '../database';
-import { CategoryStore } from '../models/Category';
 import { Category } from '../types/category';
 import { Product, ProductDetails } from '../types/product';
+import { CategoryRepository } from './CategoryRepository';
 
 export class ProductRepository {
   static async findAll(): Promise<Product[]> {
@@ -51,7 +51,7 @@ export class ProductRepository {
         categoryIdResult.rows[0].id
       ]);
     } else {
-      newCategory = await CategoryStore.create(details.category);
+      newCategory = await CategoryRepository.save(details.category);
       result = await conn.query(createProductQuery, [
         details.name,
         details.price,

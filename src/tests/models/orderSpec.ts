@@ -2,8 +2,6 @@ import { OrderStore } from '../../models/Order';
 import { ProductStore } from '../../models/Product';
 import { UserStore } from '../../models/User';
 import { Order } from '../../types/order';
-// import { Product } from '../../types/product';
-// import { User } from '../../types/user';
 
 describe('OrderStore should have ', () => {
   it('create method', () => {
@@ -19,81 +17,8 @@ describe('OrderStore should have ', () => {
     expect(OrderStore.completeUserOrder).toBeDefined();
   });
 });
-// let activeUser: User;
 
-// let activeProduct: Product;
-
-// let activeOrder: Order;
-
-// let compProduct: Product;
-// let compUser: User
-// let compOrderFive: Order;
-// let completedOrderFive:Order
-
-// beforeAll(async () => {
-//   activeUser = await UserStore.create({
-//     firstName: 'John',
-//     lastName: 'Johnson',
-//     password: 'JohnDo$123'
-//   });
-
-//   activeProduct = await ProductStore.create({
-//     name: 'Active Product',
-//     price: '200',
-//     category: 'General purpose'
-//   });
-
-//   const orderFour = {
-//     productId: activeProduct.id,
-//     quantity: 5,
-//     userId: activeUser.id
-//   };
-
-//   activeOrder = (await OrderStore.create(orderFour)) as Order;
-
-//    compProduct = await ProductStore.create({
-//     name: 'Dummy knife',
-//     price: '25.02',
-//     category: 'Gentlemen'
-//   });
-
-//    compUser = await UserStore.create({
-//     firstName: 'Damien',
-//     lastName: 'Dark',
-//     password: '1og@nloG'
-//   });
-
-//    compOrderFive = (await OrderStore.create({
-//     productId: compProduct.id,
-//     quantity: 7,
-//     userId: compUser.id
-//   })) as Order;
-
-//    completedOrderFive = (await OrderStore.completeUserOrder({
-//     userId: compUser.id,
-//     productId: compProduct.id,
-//     orderId: compOrderFive.id
-//   })) as Order;
-// });
-
-// beforeAll(() => {
-//   // setTimeout(()=> {}, 100000)
-//   jasmine.DEFAULT_TIMEOUT_INTERVAL = 100000;
-// })
-
-beforeEach(() => {
-  // setTimeout(()=> {}, 100000)
-  // jasmine.DEFAULT_TIMEOUT_INTERVAL = 100000;
-});
-
-// afterEach(() => {
-//   jasmine.clearAllTimers()
-// });
-
-fdescribe('OrderStore should', () => {
-  //   beforeEach(function() {
-  //     jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000000;
-  // });
+describe('OrderStore should', () => {
   it('create order', async () => {
     const user = await UserStore.create({
       firstName: 'John',
@@ -192,6 +117,32 @@ fdescribe('OrderStore should', () => {
     });
   });
 
+  it('should show active orders by user', async () => {
+    const activeUser = await UserStore.create({
+      firstName: 'John',
+      lastName: 'Johnson',
+      password: 'JohnDo$123'
+    });
+
+    const activeProduct = await ProductStore.create({
+      name: 'Active Product',
+      price: '200',
+      category: 'General purpose'
+    });
+
+    const orderFour = {
+      productId: activeProduct.id,
+      quantity: 5,
+      userId: activeUser.id
+    };
+
+    const activeOrder = (await OrderStore.create(orderFour)) as Order;
+
+    expect(await OrderStore.currentOrdersByUser(activeUser.id)).toEqual([
+      activeOrder
+    ]);
+  });
+
   it('should complete multiple orders', async () => {
     const multiProduct = await ProductStore.create({
       name: 'Multi Product',
@@ -254,32 +205,6 @@ fdescribe('OrderStore should', () => {
     ]);
   });
 
-  it('should show active orders by user', async () => {
-    const activeUser = await UserStore.create({
-      firstName: 'John',
-      lastName: 'Johnson',
-      password: 'JohnDo$123'
-    });
-
-    const activeProduct = await ProductStore.create({
-      name: 'Active Product',
-      price: '200',
-      category: 'General purpose'
-    });
-
-    const orderFour = {
-      productId: activeProduct.id,
-      quantity: 5,
-      userId: activeUser.id
-    };
-
-    const activeOrder = (await OrderStore.create(orderFour)) as Order;
-
-    expect(await OrderStore.currentOrdersByUser(activeUser.id)).toEqual([
-      activeOrder
-    ]);
-  });
-
   it('should show completed orders by user', async () => {
     const compProduct = await ProductStore.create({
       name: 'Dummy knife',
@@ -304,11 +229,9 @@ fdescribe('OrderStore should', () => {
       productId: compProduct.id,
       orderId: compOrderFive.id
     })) as Order;
-    console.log('completedOrderFive', completedOrderFive);
 
     const result = await OrderStore.completedOrdersByUser(compUser.id);
 
     expect(result).toEqual([completedOrderFive]);
-    // expect(true).toEqual(true);
   });
 });

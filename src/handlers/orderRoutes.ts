@@ -7,8 +7,12 @@ const create = async (
   res: Response,
   next: NextFunction
 ): Promise<Response | void> => {
-  const orders = await OrderStore.create(req.body);
-  res.status(StatusCodes.CREATED).json(orders);
+  try {
+    const orders = await OrderStore.create(req.body);
+    res.status(StatusCodes.CREATED).json(orders);
+  } catch (error) {
+    next(error);
+  }
 };
 
 const completeUserOrder = async (
@@ -16,8 +20,12 @@ const completeUserOrder = async (
   res: Response,
   next: NextFunction
 ): Promise<Response | void> => {
-  const orders = await OrderStore.completeUserOrder(req.body);
-  res.status(StatusCodes.CREATED).json(orders);
+  try {
+    const orders = await OrderStore.completeUserOrder(req.body);
+    res.status(StatusCodes.CREATED).json(orders);
+  } catch (error) {
+    next(error);
+  }
 };
 
 const activeOrders = async (
@@ -25,8 +33,12 @@ const activeOrders = async (
   res: Response,
   next: NextFunction
 ): Promise<Response | void> => {
-  const orders = await OrderStore.currentOrdersByUser(req.params.userId);
-  res.status(StatusCodes.OK).json(orders);
+  try {
+    const orders = await OrderStore.currentOrdersByUser(req.params.userId);
+    res.status(StatusCodes.OK).json(orders);
+  } catch (error) {
+    next(error);
+  }
 };
 
 const orderRoutes = (app: Application) => {

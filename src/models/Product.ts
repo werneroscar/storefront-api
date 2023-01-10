@@ -22,7 +22,6 @@ export class ProductStore {
     return product;
   }
 
-  //TODO: add trailing zeros
   static async create(details: ProductDetails): Promise<Product> {
     await productSchema.validateAsync(details, { abortEarly: false });
 
@@ -47,7 +46,7 @@ export class ProductStore {
     return createdProduct;
   }
 
-  //TODO: Move topNProducts to dashboard
+  //TODO: implement topNProducts
   //@ts-ignore
   static async topNProducts(): Promise<Product[]> {}
 

@@ -36,9 +36,8 @@ export class OrderRepository {
 
     return { values, sql };
   }
-  static async save(details: OrderDetails): Promise<Order> {
-    // console.log(details);
 
+  static async save(details: OrderDetails): Promise<Order> {
     const conn = await client.connect();
     const saveInfo = OrderRepository.getSaveInfo(details);
     const result: QueryResult<Order> = await conn.query(
@@ -68,16 +67,15 @@ export class OrderRepository {
 
   static async findByStatus(status: string, id: string): Promise<Order[]> {
     const conn = await client.connect();
+
     const ordersQuery =
       'SELECT id, product_id AS "productId", quantity, cost, ' +
       'user_id AS "userId", status, created_at AS "createdAt", ' +
       'completed_at AS "completedAt" FROM orders WHERE status = ' +
       `'${status}'` +
       ' AND user_id = ($1)';
-    //   console.log(ordersQuery);
 
     const result: QueryResult<Order> = await conn.query(ordersQuery, [id]);
-    // console.log(result.rows);
 
     conn.release();
     return result.rows;
@@ -88,8 +86,7 @@ export class OrderRepository {
   }
 
   static async findByCompletedUserOrders(id: string): Promise<Order[]> {
-    const completedOrders = await OrderRepository.findByStatus('completed', id);
-    return completedOrders;
+    return await OrderRepository.findByStatus('completed', id);
   }
 
   static async complete(details: CompletOrderDetails): Promise<Order> {
@@ -105,13 +102,11 @@ export class OrderRepository {
       details.userId,
       details.productId
     ]);
-
+    conn.release();
     return result.rows[0];
   }
 
   static async completeAll(details: CompletOrderDetails[]): Promise<Order[]> {
-    // console.log('ALL dets', details);
-
     const completed: Order[] = [];
 
     for (let detail of details) {

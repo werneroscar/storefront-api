@@ -21,6 +21,7 @@ export class CategoryRepository {
       createCategoryQuery,
       [name]
     );
+    conn.release();
     return result.rows[0];
   }
 
@@ -32,7 +33,7 @@ export class CategoryRepository {
     const result: QueryResult<Category> = await conn.query(categoryQuery, [
       name.toLowerCase()
     ]);
-
+    conn.release();
     return result.rows[0];
   }
 }
