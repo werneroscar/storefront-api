@@ -22,7 +22,7 @@ const completeUserOrder = async (
 ): Promise<Response | void> => {
   try {
     const orders = await OrderStore.completeUserOrder(req.body);
-    res.status(StatusCodes.CREATED).json(orders);
+    res.status(StatusCodes.OK).json(orders);
   } catch (error) {
     next(error);
   }
@@ -43,9 +43,9 @@ const activeOrders = async (
 
 const orderRoutes = (app: Application) => {
   app.route('/orders').post(create);
-  app.route('/orders/mark-as-complete').post(completeUserOrder);
+  app.route('/orders/complete-order').post(completeUserOrder);
   app.route('/orders/:userId/active').get(activeOrders);
-  app.route('/orders/:userId/completed').get(activeOrders);
+  app.route('/orders/:userId/complete').get(activeOrders);
 };
 
 export default orderRoutes;
