@@ -18,7 +18,7 @@ const getToken = async (
 };
 
 const authRoutes = (app: Application) => {
-    app.route('/auth/token').get(getToken);
-}
+  app.route('/auth/token').get(getToken);
+};
 
 export default authRoutes;

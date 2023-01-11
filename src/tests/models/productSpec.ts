@@ -1,7 +1,6 @@
 import { CategoryStore } from '../../models/Category';
 import { ProductStore } from '../../models/Product';
-import { Category } from '../../types/category';
-import { Product } from '../../types/product';
+import { ProductRepository } from '../../repositories/ProductRepository';
 
 describe('Product Store should have', () => {
   it('an index method', () => {
@@ -26,23 +25,14 @@ describe('Product Store should have', () => {
 });
 
 describe('Product Store ', () => {
-  let testProduct: Product;
-  let testProductTwo: Product;
-  let testProductThree: Product;
-  let testProductFour: Product;
-
-  let testCategory: Category;
-
   it('should create product', async () => {
     const category = await CategoryStore.create('Ladies Wear');
 
-    testCategory = category;
     const product = await ProductStore.create({
       name: 'Test Product',
       price: '2.99',
       category: category.name
     });
-    testProduct = product;
 
     expect(product).toEqual({
       id: product.id,
@@ -54,46 +44,39 @@ describe('Product Store ', () => {
   });
 
   it('should show requested product', async () => {
-    expect(await ProductStore.show(testProduct.id)).toEqual({
-      id: testProduct.id,
-      name: testProduct.name,
-      price: testProduct.price,
-      category: testProduct.category,
-      categoryId: testProduct.categoryId
+    const category = await CategoryStore.create('Male Toys');
+
+    const product = await ProductStore.create({
+      name: 'Tony Stark',
+      price: '6.03',
+      category: category.name
+    });
+
+    expect(await ProductStore.show(product.id)).toEqual({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      category: product.category,
+      categoryId: product.categoryId
     });
   });
 
   it('should show products by category', async () => {
+    const categoryOne = await CategoryStore.create('Female Toys');
+
     const productTwo = await ProductStore.create({
       name: 'Test Product two',
       price: '4.99',
-      category: testCategory.name
+      category: categoryOne.name
     });
-    testProductTwo = productTwo;
 
     const productThree = await ProductStore.create({
       name: 'Test Product Three',
       price: '46.43',
-      category: testCategory.name
+      category: categoryOne.name
     });
-    testProductThree = productThree;
 
-    const category = await CategoryStore.create("Men's underwear");
-
-    const productFour = await ProductStore.create({
-      name: 'Test Product Four',
-      price: '7',
-      category: category.name
-    });
-    testProductFour = productFour;
-    expect(await ProductStore.productsByCategory(testCategory.name)).toEqual([
-      {
-        id: testProduct.id,
-        name: testProduct.name,
-        price: testProduct.price,
-        category: testProduct.category,
-        categoryId: testProduct.categoryId
-      },
+    expect(await ProductStore.productsByCategory(categoryOne.name)).toEqual([
       {
         id: productTwo.id,
         name: productTwo.name,
@@ -112,8 +95,38 @@ describe('Product Store ', () => {
   });
 
   it('should show all products', async () => {
+    await ProductRepository.truncate();
+
     //For some weird reason I don't know
     //it doesn't come back in the order of insersion
+    const categoryOne = await CategoryStore.create('Dolls');
+
+    const categoryTwo = await CategoryStore.create("Men's underwear");
+
+    const testProduct = await ProductStore.create({
+      name: 'Test Product',
+      price: '7',
+      category: categoryOne.name
+    });
+
+    const testProductTwo = await ProductStore.create({
+      name: 'Test Product Two',
+      price: '7.36',
+      category: categoryTwo.name
+    });
+
+    const testProductThree = await ProductStore.create({
+      name: 'Test Product Three',
+      price: '7.36',
+      category: categoryOne.name
+    });
+
+    const testProductFour = await ProductStore.create({
+      name: 'Test Product Four',
+      price: '7.36',
+      category: categoryTwo.name
+    });
+
     expect(await ProductStore.index()).toEqual([
       {
         id: testProductThree.id,
@@ -121,13 +134,6 @@ describe('Product Store ', () => {
         price: testProductThree.price,
         category: testProductThree.category,
         categoryId: testProductThree.categoryId
-      },
-      {
-        id: testProductTwo.id,
-        name: testProductTwo.name,
-        price: testProductTwo.price,
-        category: testProductTwo.category,
-        categoryId: testProductTwo.categoryId
       },
       {
         id: testProduct.id,
@@ -142,6 +148,13 @@ describe('Product Store ', () => {
         price: testProductFour.price,
         category: testProductFour.category,
         categoryId: testProductFour.categoryId
+      },
+      {
+        id: testProductTwo.id,
+        name: testProductTwo.name,
+        price: testProductTwo.price,
+        category: testProductTwo.category,
+        categoryId: testProductTwo.categoryId
       }
     ]);
   });

@@ -1,11 +1,12 @@
+import { ValidationError } from 'joi';
+
 import { UserStore } from '../../models/User';
 import { BadRequestError } from '../../errors';
 import {
   getInvalidDetailsError,
   getInvalidIdError
 } from '../../utils/get-errors';
-
-import { ValidationError } from 'joi';
+import { UserRepository } from '../../repositories/UserRepository';
 
 const userPassword = 'User@123';
 
@@ -23,10 +24,12 @@ describe('User store', () => {
 
 describe('Userstore index method', () => {
   it('should be empty to start with', async () => {
+    await UserRepository.truncate();
     expect(await UserStore.index()).toEqual([]);
   });
 
   it('should contain all created users', async () => {
+    await UserRepository.truncate();
     const firstUser = await UserStore.create({
       firstName: 'Micheal',
       lastName: 'Lopez',
