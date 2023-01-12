@@ -5,7 +5,7 @@ const nameValidation = (name: string): Joi.StringSchema<string> => {
     .required()
     .min(1)
     .max(50)
-    .pattern(/^[a-zA-Z\s\-\']+$/)
+    .pattern(/^[a-zA-Z\s-']+$/)
     .messages({
       'string.pattern.base': `${name} must only contain alphabets and hyphens, apostrophe and whitespace`
     });

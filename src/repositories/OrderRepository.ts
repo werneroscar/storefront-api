@@ -53,7 +53,7 @@ export class OrderRepository {
 
     const conn = await client.connect();
 
-    for (let detail of details) {
+    for (const detail of details) {
       const saveInfo = OrderRepository.getSaveInfo(detail);
       const result: QueryResult<Order> = await conn.query(
         saveInfo.sql,
@@ -109,7 +109,7 @@ export class OrderRepository {
   static async completeAll(details: CompletOrderDetails[]): Promise<Order[]> {
     const completed: Order[] = [];
 
-    for (let detail of details) {
+    for (const detail of details) {
       completed.push(await OrderRepository.complete(detail));
     }
 

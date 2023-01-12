@@ -6,6 +6,7 @@ import { ProductRepository } from '../repositories/ProductRepository';
 import { Product, ProductDetails } from '../types/product';
 import { productSchema, uuidSchema } from '../utils/validations';
 
+//TODO: implement topNProducts
 export class ProductStore {
   static async index(): Promise<Product[]> {
     return await ProductRepository.findAll();
@@ -45,10 +46,6 @@ export class ProductStore {
 
     return createdProduct;
   }
-
-  //TODO: implement topNProducts
-  //@ts-ignore
-  static async topNProducts(): Promise<Product[]> {}
 
   static async productsByCategory(category: string): Promise<Product[]> {
     const selectedCategory = await CategoryRepository.findByName(category);

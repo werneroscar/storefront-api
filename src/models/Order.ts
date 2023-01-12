@@ -19,7 +19,7 @@ export class OrderStore {
   ): Promise<Order | Order[]> {
     if (Array.isArray(details)) {
       await orderSchema.validateAsync(details);
-      for (let detail of details) {
+      for (const detail of details) {
         detail.cost = await OrderStore.calculateCost(detail);
       }
 

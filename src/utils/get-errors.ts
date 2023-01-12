@@ -1,7 +1,7 @@
-import { UserDetails } from '../types/user';
+import { User, UserDetails } from '../types/user';
 
 const getInvalidDetailsError = async (
-  fn: Function,
+  fn: (userDetails: UserDetails) => Promise<User>,
   details: UserDetails
 ): Promise<unknown> => {
   let error;
@@ -16,7 +16,7 @@ const getInvalidDetailsError = async (
 };
 
 const getInvalidIdError = async (
-  fn: Function,
+  fn: (id: string) => Promise<User>,
   id: string
 ): Promise<unknown> => {
   let error;
@@ -31,7 +31,7 @@ const getInvalidIdError = async (
 };
 
 const getInvalidAuthPasswordError = (
-  fn: Function,
+  fn: (password: string) => string,
   password: string
 ): unknown => {
   let error;

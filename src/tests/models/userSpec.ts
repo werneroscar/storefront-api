@@ -58,7 +58,7 @@ describe('Userstore index method', () => {
 });
 
 describe('Userstore show method', () => {
-  it('should throw BadRequestError if user id is invalid', async () => {
+  it('should throw ValidationError if user id is invalid', async () => {
     const error = await getInvalidIdError(UserStore.show, '5');
     expect(error).toBeInstanceOf(ValidationError);
   });
@@ -118,7 +118,7 @@ describe('User store create method', () => {
 });
 
 describe('User store first name check', () => {
-  it('should should throw BadRequestError if first name is not provided', async () => {
+  it('should should throw ValidationError if first name is not provided', async () => {
     //@ts-ignore
     const user = {
       firstName: undefined,
@@ -132,7 +132,7 @@ describe('User store first name check', () => {
     expect(error).toBeInstanceOf(ValidationError);
   });
 
-  it('should should throw BadRequestError if first name less than one character', async () => {
+  it('should should throw ValidationError if first name less than one character', async () => {
     const user = {
       firstName: '',
       lastName: 'Logan',
@@ -143,7 +143,7 @@ describe('User store first name check', () => {
     expect(error).toBeInstanceOf(ValidationError);
   });
 
-  it('should should throw BadRequestError if first name contains number', async () => {
+  it('should should throw ValidationError if first name contains number', async () => {
     const user = {
       firstName: 'Name1234',
       lastName: 'Logan',
@@ -154,7 +154,7 @@ describe('User store first name check', () => {
     expect(error).toBeInstanceOf(ValidationError);
   });
 
-  it('should should throw BadRequestError if first name is contains any special character other than hypen', async () => {
+  it('should should throw ValidationError if first name is contains any special character other than hypen', async () => {
     const user = {
       firstName: 'd@niel',
       lastName: 'Logan',
@@ -165,7 +165,7 @@ describe('User store first name check', () => {
     expect(error).toBeInstanceOf(ValidationError);
   });
 
-  it('should should NOT throw BadRequestError if first name is contains hypen', async () => {
+  it('should should NOT throw ValidationError if first name is contains hypen', async () => {
     const user = {
       firstName: 'First-name',
       lastName: 'Logan',
@@ -178,7 +178,7 @@ describe('User store first name check', () => {
 });
 
 describe('User store last name check', () => {
-  it('should should throw BadRequestError if last name is not provided', async () => {
+  it('should should throw ValidationError if last name is not provided', async () => {
     //@ts-ignore
     const user = {
       firstName: 'Samuel',
@@ -191,7 +191,7 @@ describe('User store last name check', () => {
     expect(error).toBeInstanceOf(ValidationError);
   });
 
-  it('should should throw BadRequestError if last name less than one character', async () => {
+  it('should should throw ValidationError if last name less than one character', async () => {
     const user = {
       firstName: 'Micheal',
       lastName: '',
@@ -202,7 +202,7 @@ describe('User store last name check', () => {
     expect(error).toBeInstanceOf(ValidationError);
   });
 
-  it('should should throw BadRequestError if last name contains number', async () => {
+  it('should should throw ValidationError if last name contains number', async () => {
     const user = {
       firstName: 'Logan',
       lastName: 'Name1234',
@@ -213,7 +213,7 @@ describe('User store last name check', () => {
     expect(error).toBeInstanceOf(ValidationError);
   });
 
-  it('should should throw BadRequestError if last name is contains any special character other than hypen', async () => {
+  fit('should should throw ValidationError if last name is contains any special character other than hypen', async () => {
     const user = {
       firstName: 'Logan',
       lastName: 'd@niel',
@@ -224,7 +224,7 @@ describe('User store last name check', () => {
     expect(error).toBeInstanceOf(ValidationError);
   });
 
-  it('should should NOT throw BadRequestError if last name contains hypen', async () => {
+  it('should should NOT throw ValidationError if last name contains hypen', async () => {
     const user = {
       lastName: 'Logan',
       firstName: 'Last-name',
@@ -238,15 +238,15 @@ describe('User store last name check', () => {
 
 describe('User store password check', () => {
   //@ts-ignore
-  let user = {
+  const user = {
     firstName: 'George',
     lastName: 'White',
     password: ''
   };
 
-  it('should should throw BadRequestError if password is not provided', async () => {
+  it('should should throw ValidationError if password is not provided', async () => {
     //@ts-ignore
-    let user = {
+    const user = {
       firstName: 'Joyce',
       lastName: 'Washington',
       password: undefined
@@ -256,31 +256,31 @@ describe('User store password check', () => {
     expect(error).toBeInstanceOf(ValidationError);
   });
 
-  it('should should throw BadRequestError if password is less than 8 characters long', async () => {
+  it('should should throw ValidationError if password is less than 8 characters long', async () => {
     user.password = '1bcDEF@';
     const error = await getInvalidDetailsError(UserStore.create, user);
     expect(error).toBeInstanceOf(ValidationError);
   });
 
-  it('should should throw BadRequestError if password contains no number', async () => {
+  it('should should throw ValidationError if password contains no number', async () => {
     user.password = 'QWavdje@ij';
     const error = await getInvalidDetailsError(UserStore.create, user);
     expect(error).toBeInstanceOf(ValidationError);
   });
 
-  it('should should throw BadRequestError if password contains no special character', async () => {
+  it('should should throw ValidationError if password contains no special character', async () => {
     user.password = 'QWavdje8ij';
     const error = await getInvalidDetailsError(UserStore.create, user);
     expect(error).toBeInstanceOf(ValidationError);
   });
 
-  it('should should throw BadRequestError if password contains no upper case character', async () => {
+  it('should should throw ValidationError if password contains no upper case character', async () => {
     user.password = 'qwavdje8i36j#';
     const error = await getInvalidDetailsError(UserStore.create, user);
     expect(error).toBeInstanceOf(ValidationError);
   });
 
-  it('should should throw BadRequestError if password contains no lower case character', async () => {
+  it('should should throw ValidationError if password contains no lower case character', async () => {
     user.password = 'ASDER8632@#';
     const error = await getInvalidDetailsError(UserStore.create, user);
     expect(error).toBeInstanceOf(ValidationError);

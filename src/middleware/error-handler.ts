@@ -2,13 +2,12 @@ import { CustomError } from '../errors';
 import { StatusCodes } from 'http-status-codes';
 import { ValidationError } from 'joi';
 
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 
 const errorHandlerMiddleware = (
   err: Error,
   _req: Request,
-  res: Response,
-  _next: NextFunction
+  res: Response
 ): Response => {
   if (err instanceof ValidationError) {
     return res
