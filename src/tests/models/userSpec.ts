@@ -213,7 +213,7 @@ describe('User store last name check', () => {
     expect(error).toBeInstanceOf(ValidationError);
   });
 
-  fit('should should throw ValidationError if last name is contains any special character other than hypen', async () => {
+  it('should should throw ValidationError if last name is contains any special character other than hypen', async () => {
     const user = {
       firstName: 'Logan',
       lastName: 'd@niel',

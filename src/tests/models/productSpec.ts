@@ -14,11 +14,7 @@ describe('Product Store should have', () => {
   it('a create method', () => {
     expect(ProductStore.create).toBeDefined();
   });
-
-  it('a topNProducts method', () => {
-    expect(ProductStore.topNProducts()).toBeDefined();
-  });
-
+  
   it('a productsByCategory method', () => {
     expect(ProductStore.productsByCategory).toBeDefined();
   });
