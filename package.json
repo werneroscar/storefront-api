@@ -9,7 +9,7 @@
     "tsc": "tsc",
     "jasmine": "jasmine",
     "build": "npx tsc",
-    "test": "set ENV=test && npx tsc && db-migrate --env test reset && db-migrate --env test up && jasmine",
+    "test": "db-migrate db:create storefront_test && set port=3001 && set ENV=test && npx tsc && db-migrate --env test reset && db-migrate --env test up && jasmine && db-migrate db:drop storefront_test",
     "lint": "npx eslint . --ext .ts",
     "prettier": "prettier --config .prettierrc src/**/*.ts --write",
     "initdb": "db-migrate up"

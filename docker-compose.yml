@@ -11,23 +11,23 @@ services:
       - POSTGRES_DB=storefront
     volumes:
       - 'postgres:/var/lib/postgresql/data'
-    networks:
-      - api
+    # networks:
+    #   - api
 
-  storefront-api:
-    build: .
-    container_name: storefront-api
-    ports:
-      - "3000:3000"
-    env_file:
-      - .env
-    depends_on:
-      - postgres
-    networks:
-      - api
+  # storefront-api:
+  #   build: .
+  #   container_name: storefront-api
+  #   ports:
+  #     - "3000:3000"
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     - postgres
+  #   networks:
+  #     - api
 volumes:
   postgres:
 
-networks:
-  api:
-    driver: bridge
+# networks:
+#   api:
+#     driver: bridge
