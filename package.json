@@ -11,7 +11,8 @@
     "build": "npx tsc",
     "test": "set ENV=test && npx tsc && db-migrate --env test reset && db-migrate --env test up && jasmine",
     "lint": "npx eslint . --ext .ts",
-    "prettier": "prettier --config .prettierrc src/**/*.ts --write"
+    "prettier": "prettier --config .prettierrc src/**/*.ts --write",
+    "initdb": "db-migrate up"
   },
   "author": "Udacity",
   "license": "ISC",
